@@ -1,7 +1,6 @@
-//importation de mongoose
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); //On importe mongoose
 
-//template du produit a créé
+//Template du produit a créé
 const sauceSchema = mongoose.Schema({
 userID: { type: String, require: true },
 name: { type: String, require: true },

@@ -2,7 +2,11 @@ const express = require('express'); //On importe express
 const mongoose = require('mongoose'); //On importe mongoose
 const bodyParser = require('body-parser'); //On importe bodyParser
 const app = express(); //On met express dans une constante
-const saucesRoutes = require('./routes/sauces'); //On importe les routes
+
+//On importe les routes
+const saucesRoutes = require('./routes/sauces'); 
+const userRoutes = require('./routes/user')
+
 
 //On lie la base de données avec le serveur
 mongoose.connect('mongodb+srv://Stirish:Swartzy-62@cluster0.dlcdu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
@@ -21,7 +25,8 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-//On active les routes
+//On enregistre les routes
 app.use('./api/sauces', saucesRoutes);
+app.use('./api.auth', userRoutes);
   
 module.exports = app;
