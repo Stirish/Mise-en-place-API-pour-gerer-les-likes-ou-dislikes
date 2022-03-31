@@ -1,4 +1,5 @@
-const bcrypt =require('bcrypt');//On importe bcrypt
+const bcrypt = require('bcrypt'); //On importe bcrypt
+const jwt = require('jsonwebtoken'); //On importe jsonwebtoken
 const User = require('../models/user'); //On importe le template 'user' du dossier 'models'
 
 //Création d'un utilisateur (cryptage du mot de passe avec 'hash')
@@ -30,7 +31,11 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).json({
                         userID: user._id,
-                        token: 'TOKEN'
+                        token: jwt.sign(
+                            { userID: user._id },
+                            'RANDOM_TOKEN_SECRET',
+                            { expiresIn: '24h' }
+                        )
                     });
                 })
                 .catch(error => res.status(500).json({ error }))
