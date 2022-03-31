@@ -1,16 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
+const express = require('express'); //On importe express
+const mongoose = require('mongoose'); //On importe mongoose
+const bodyParser = require('body-parser'); //On importe bodyParser
+const app = express(); //On met express dans une constante
+const saucesRoutes = require('./routes/sauces'); //On importe les routes
 
+//On lie la base de données avec le serveur
 mongoose.connect('mongodb+srv://Stirish:Swartzy-62@cluster0.dlcdu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
-
-
-app.use(express.json());
 
 //CORS (système de sécurité qui boque les requêtes malveillantes)
 app.use((req, res, next) => {
@@ -20,32 +19,9 @@ app.use((req, res, next) => {
     next();
   });
 
-app.post('/api/sauces', (req, res, next) => {
-    console.log(req.body);
-    app.status(201).json({
-        message: 'Objet Créé !'
-    });
-});
-app.get('/api/sauces', (req, res, next) => {
-    const sauces = [
-        {
-            _id: 'azerty',
-            title: 'sauce',
-            descripton: 'piquante',
-            imageURL: '',
-            price: '2000',
-            userID: 'azer',
-        },
-        {
-            _id: 'uiop',
-            title: 'saue',
-            descripton: 'cremeuse',
-            imageURL: '',
-            price: '3000',
-            userID: 'aer',
-        },
-    ];
-    res.status(200).json(sauces);
-});
+app.use(bodyParser.json());
 
+//On active les routes
+app.use('./api/sauces', saucesRoutes);
+  
 module.exports = app;
