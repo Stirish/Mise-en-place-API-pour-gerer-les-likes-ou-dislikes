@@ -2,9 +2,11 @@ const Sauce = require('../models/sauce'); //On importe le template 'sauce' du do
 
 //Création d'un produit
 exports.createSauce = (req, res, next) => {
-    delete req.body._id;
+    const sauceObject = JSON.parse(req.body.sauce)
+    delete sauceObject._id;
     const sauce = new Sauce({
-        ...req.body
+        ...sauceObject,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //On génére l'url de l'image
     });
     sauce.save()
         .then(() => res.status(201).json({ message: 'Sauce enregistré !' }))
@@ -13,7 +15,12 @@ exports.createSauce = (req, res, next) => {
 
 //Modifier un produit
 exports.modifySauce = (req, res, next) => {
-    Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.paramq.id })
+    const sauceObject = req.file ?
+    {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+     } : { ...req.body };
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
         .then(() => res.status(200).json({ message: 'Sauce modifié !' }))
         .catch(error => res.status(400).json({ error }));
 };
