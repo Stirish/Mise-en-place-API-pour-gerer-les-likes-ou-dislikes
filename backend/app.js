@@ -15,7 +15,7 @@ mongoose.connect('mongodb+srv://Stirish:Swartzy-62@cluster0.dlcdu.mongodb.net/my
 
 
 
-//CORS (système de sécurité qui boque les requêtes malveillantes)
+//CORS (système de sécurité qui bloque les requêtes malveillantes)
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

@@ -1,4 +1,5 @@
 const Sauce = require('../models/sauce'); //On importe le template 'sauce' du dossier 'models'
+const fs = require('fs');
 
 //Création d'un produit
 exports.createSauce = (req, res, next) => {
@@ -27,9 +28,16 @@ exports.modifySauce = (req, res, next) => {
 
 //Supprimer un produit
 exports.deleteSauce = (req, res, next) => {
-    Sauce.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Sauce supprimé !' }))
-        .catch(error => res.status(400).json({ error }));
+    Sauce.findOne({ _id: req.params.id }) //On trouve l'objet dns la base de donnée
+        .then(sauce => {
+            const filename = sauce.imageUrl.split('/images/')[1];//On extrait le nom du fichier a supprimer
+            fs.unlink(`images/${filename}`, () => { //On supprime le fichier 'fs.unlink'
+                Sauce.deleteOne({ _id: req.params.id })//On supprime l'objet
+                    .then(() => res.status(200).json({ message: 'Sauce supprimé'}))
+                    .catch(error => res.status(400).json({ error }));
+            })
+        })
+        .catch(error => res.status(500).json({ error }));
 };
 
 //Récupérer un produit par son id
