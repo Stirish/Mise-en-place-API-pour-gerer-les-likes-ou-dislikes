@@ -28,11 +28,11 @@ exports.modifySauce = (req, res, next) => {
 
 //Supprimer un produit
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id }) //On trouve l'objet dns la base de donnée
+    Sauce.findOne({ _id: req.params.id }) //On trouve l'objet dans la base de donnée
         .then(sauce => {
-            const filename = sauce.imageUrl.split('/images/')[1];//On extrait le nom du fichier a supprimer
+            const filename = sauce.imageUrl.split('/images/')[1]; //On extrait le nom du fichier a supprimer
             fs.unlink(`images/${filename}`, () => { //On supprime le fichier 'fs.unlink'
-                Sauce.deleteOne({ _id: req.params.id })//On supprime l'objet
+                Sauce.deleteOne({ _id: req.params.id }) //On supprime l'objet
                     .then(() => res.status(200).json({ message: 'Sauce supprimé'}))
                     .catch(error => res.status(400).json({ error }));
             })

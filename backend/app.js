@@ -2,7 +2,8 @@ const express = require('express'); //On importe express
 const app = express(); //On met express dans une constante
 const bodyParser = require('body-parser'); //On importe bodyParser
 const saucesRoutes = require('./routes/sauces'); //On importe les routes
-const userRoutes = require('./routes/user')
+const userRoutes = require('./routes/user');
+const likeRoute = require('./routes/like');
 const mongoose = require('mongoose'); //On importe mongoose
 const path = require('path');
 
@@ -29,5 +30,7 @@ app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', likeRoute);
+
   
 module.exports = app;
