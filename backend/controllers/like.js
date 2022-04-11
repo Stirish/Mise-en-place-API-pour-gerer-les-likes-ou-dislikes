@@ -7,9 +7,12 @@ exports.handleLikeOption = (req, res, next) => {
     const userId = req.body.userId;
     Sauce.findOne({ _id: req.params.id }) // On va chercher le produit par son id
         .then (sauce => {  
+            console.log(typeof like);
             if(like === 1) { //Si like est egal à 1, l'utilisateur aime
                 let likeUser = checkUser(sauce.usersLiked, userId);
-                if(!likeUser) {
+                let dislikeUser = checkUser(sauce.usersDisliked, userId);
+                if(!likeUser && !dislikeUser) {
+                    console.log('erreur');
                     sauce.likes += 1;
                     sauce.usersLiked.push(userId); 
                 } 
@@ -19,7 +22,10 @@ exports.handleLikeOption = (req, res, next) => {
             }
             else if (like === -1) {
                 let dislikeUser = checkUser(sauce.usersDisliked, userId);
-                if(!dislikeUser) {
+                let likeUser = checkUser(sauce.usersLiked, userId);
+                if(!dislikeUser && !likeUser) {
+                    console.log('une deuxieme erreur');
+                    console.log(sauce);
                     sauce.dislikes += 1;
                     sauce.usersDisliked.push(userId); 
                 } 
@@ -27,14 +33,14 @@ exports.handleLikeOption = (req, res, next) => {
                     throw new Error("On ne peut disliker une sauce qu'une seule fois");
                 }
             }
-            else if (like === 0) {
-                let userLiked = sauce.usersLiked.find (id => id === userId);
+            else if (like === 0) {    
+                let userLiked = checkUser(sauce.usersLiked, userId);
                 if(userLiked){
                     sauce.likes -= 1;
                     sauce.usersLiked = createNewUserIdArray(sauce.usersLiked, userId);
                 }
                 else {
-                let userDisliked = sauce.usersDisliked.find (id => id === userId);
+                let userDisliked = checkUser(sauce.usersDisliked, userId);
                     if(userDisliked){
                         sauce.dislikes -= 1;
                         sauce.usersDisliked = createNewUserIdArray(sauce.usersDisliked, userId);
