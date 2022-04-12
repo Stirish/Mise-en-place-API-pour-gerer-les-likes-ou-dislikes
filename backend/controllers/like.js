@@ -7,12 +7,10 @@ exports.handleLikeOption = (req, res, next) => {
     const userId = req.body.userId;
     Sauce.findOne({ _id: req.params.id }) // On va chercher le produit par son id
         .then (sauce => {  
-            console.log(typeof like);
             if(like === 1) { //Si like est egal à 1, l'utilisateur aime
                 let likeUser = checkUser(sauce.usersLiked, userId);
                 let dislikeUser = checkUser(sauce.usersDisliked, userId);
                 if(!likeUser && !dislikeUser) {
-                    console.log('erreur');
                     sauce.likes += 1;
                     sauce.usersLiked.push(userId); 
                 } 
@@ -24,8 +22,6 @@ exports.handleLikeOption = (req, res, next) => {
                 let dislikeUser = checkUser(sauce.usersDisliked, userId);
                 let likeUser = checkUser(sauce.usersLiked, userId);
                 if(!dislikeUser && !likeUser) {
-                    console.log('une deuxieme erreur');
-                    console.log(sauce);
                     sauce.dislikes += 1;
                     sauce.usersDisliked.push(userId); 
                 } 
